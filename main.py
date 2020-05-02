@@ -4,31 +4,21 @@
 from ebaysdk.finding import Connection as Finding
 from ebaysdk.exception import ConnectionError
 
+try:
+     api = Finding(appid="IvyZhang-LEGGO-PRD-1bcdef08f-c0149495", config_file=None)
 
-# class Offer:
-#     ''' 
-#     storing info for one product offering
-#     '''
-#     def __init__(self,title,price,condition,shipping,url):
-#         self.title = title
-#         self.price = price
-#         self.condition = condition
-#         self.shipping = shipping
-#         self.url = url
-    
-#     def __str__(self):
-#         return f'{self.title} \nprice: {self.price} \nis a {self.condition} product \nshipping type is: {self.shipping} \nproduct url: {self.url}'
 
-def lookup_item(product):
-    try:
-        api = Finding(appid="IvyZhang-LEGGO-PRD-1bcdef08f-c0149495", config_file=None)
-        response = api.execute('findItemsAdvanced', {'keywords': product},)
-
-        # print(response.dict())
-        item_dict = response.dict()
-        # print(item_dict)
+     def lookup_item(product):
+        '''
         
-        #to print each offering 
+        product: string of product name. not case sensitive. 
+        return offering: a list of dictionary, in order of best keyword match.
+
+        '''
+            # print(response.dict())
+            # print(item_dict)
+        response = api.execute('findItemsAdvanced', {'keywords': product})
+        item_dict = response.dict()
         offerings = []
         for item in (item_dict['searchResult']['item']):
             title = item['title']
@@ -36,38 +26,54 @@ def lookup_item(product):
             url = item['viewItemURL']
             condition = item['condition']['conditionDisplayName']
             shipping = item['shippingInfo']['shippingType']
-            item_info = condition + ' product: ' + title + '   Price in USD: '+ price + '   Shipping cost: ' + shipping + '   visit product page: ' + url + '.' 
+            item_info = {'title':title, 'price':price, 'condition':condition, 'shipping':shipping, 'url':url}
             offerings.append(item_info)
         return offerings
+
+
+    #  def sort_price(product):
+    #     '''
+
+    #     product: string of product name. not case sensitive. 
+    #     return sorted: a list of dictionary, in order of price(product + shipping if available）cheapest to most expensive.
         
-        #plus sorting api 
-        # print('STARTING NEW')
-        # response = api.execute('findItemsAdvanced', {'keywords': 'lego white house'},{'sortOrder': 'PricePlusShippingLowest'})
-        # item_dict = response.dict()
-        # for item in (item_dict['searchResult']['item']):
-        #     title = item['title']
-        #     price = item['sellingStatus']['convertedCurrentPrice']['value']
-        #     url = item['viewItemURL']
-        #     condition = item['condition']['conditionDisplayName']
-        #     shipping = item['shippingInfo']['shippingType']
-        #     print(title + ' \n' + price + ' \n' + url + ' ' + '\nitem condition is:' + condition + '\nshipping type:' + shipping)
-        #     print('')
+    #     '''
+    #     response = api.execute('findItemsAdvanced', {'keywords': product})
+    #     item_dict = response.dict()
+    #     sorted = []
+    #     for item in (item_dict['searchResult']['item']):
+    #          title = item['title']
+    #          price = item['sellingStatus']['convertedCurrentPrice']['value']
+    #          url = item['viewItemURL']
+    #          condition = item['condition']['conditionDisplayName']
+    #          shipping = item['shippingInfo']['shippingType']
+    #          item_info = {'title':title, 'price':price, 'condition':condition, 'shipping':shipping, 'url':url}
+    #          sorted.append(item_info)
+    #     return sorted
 
-        #to store list of offerings into a dictionary 
-        # offerings = {}
-        # for item in (item_dict['searchResult']['item']):
-        #     title = item['title']
-        #     price = item['sellingStatus']['convertedCurrentPrice']['value']
-        #     url = item['viewItemURL']
-        #     condition = item['condition']['conditionDisplayName']
-        #     shipping = item['shippingInfo']['shippingType']
-        #     offerings[title]=[price,condition,shipping,url]
-        # print(offerings)
+    #  def store(product):
+    #      '''
+    #      product: string of product name. not case sensitive. 
+    #      return store_dict: a dictionary with key = product title and value as a list of attributes.
+    #      '''
+
+    #     response = api.execute('findItemsAdvanced', {'keywords': product})
+    #     item_dict = response.dict()
+    #     store_dict = {}
+    #     for item in (item_dict['searchResult']['item']):
+    #         title = item['title']
+    #         price = item['sellingStatus']['convertedCurrentPrice']['value']
+    #         url = item['viewItemURL']
+    #         condition = item['condition']['conditionDisplayName']
+    #         shipping = item['shippingInfo']['shippingType']
+    #         store_dict[title]=[price,condition,shipping,url]
+    #     return store_dict
             
+     
+except ConnectionError as e:
+    print(e)
 
 
-    except ConnectionError as e:
-        print(e)
-        return(e.response.dict())
-
-# lookup_item('blender')
+# print(lookup_item('blender'))
+# print(sort_price('lego'))
+# print(store('bottle'))
