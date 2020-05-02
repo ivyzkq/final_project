@@ -3,23 +3,13 @@ from main import lookup_item
 
 web = Flask(__name__)
 web.secret_key = 'jadnmwjygvnosgaudsvnmfgiuvalfjg'
-# web.secret_key = 'sddfklsdhdjkASKLFDHJrfDSFRPdf'
 
-# @web.route('/',methods=['POST','GET'])
-# def main():
-#     '''
-#     main page that greets the users and takes a text input of location
-#     '''
-
-#     if request.method =='POST':
-#         place = request.form["nm"]
-#         session['place'] = place
-#         return redirect(url_for("place"))
-#     else:
-#         return render_template('index.html')
 
 @web.route('/',methods=['POST','GET'])
 def home():
+    '''
+    home page to take user's input of product name
+    '''
     if request.method == 'POST':
         item = request.form['nm']
         session['item']=item
@@ -29,21 +19,21 @@ def home():
 
 
 @web.route('/item')
+
 def search():
+    '''
+    return search output 
+    '''
     if "item" in session:
         product = session['item']
         # f'Now displaying search result for {item}.'
         # return (f'<h1>{lookup_item(product)}</h1>')
         list_of_item = lookup_item(product)
-        return render_template('result.html',list_of_item = list_of_item,input = product)
+        return render_template('try.html',list_of_item = list_of_item,input = product, length = len(list_of_item))
         
     else:
         return redirect(url_for('home'))
 
-# @web.route('/exit')
-# def exit():
-#     print ('<h1>Thank you for using our site<h1> \n<h1>you will be redirect to a home page <h1>')
-#     return redirect(url_for('home'))
 
 @web.route('/exit')
 def exit():
