@@ -29,7 +29,7 @@ def search():
         # f'Now displaying search result for {item}.'
         # return (f'<h1>{lookup_item(product)}</h1>')
         list_of_item = lookup_item(product)
-        return render_template('try.html',list_of_item = list_of_item,input = product, length = len(list_of_item))
+        return render_template('try.html',list_of_item = list_of_item,input = product)
         
     else:
         return redirect(url_for('home'))
