@@ -1,0 +1,33 @@
+<!doctype html>
+{% extends 'parent.html' %}
+
+{% block content %}
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <!-- <th scope="col">Best Match</th> -->
+                    <th scope="col">Produt Name</th>
+                    <th scope="col">Condition</th>
+                    <th scope="col">Price (USD)</th>
+                    <th scope="col">Shipping Cost</th>
+                    <th scope="col">Product URL</th>
+            
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for item in list_of_item %}
+                        <tr>
+                            <td>{{item.title}}</td>
+                            <td>{{item.condition}}</td>
+                            <td>{{item.price}}</td>
+                            <td>{{item.shipping}}</td>
+                            <td>{{item.url}}</td>
+                        </tr>
+                    {% endfor %}
+                    <a href="{{url_for('exit')}}">Start A New Search?</a>
+                </tbody>
+            
+
+{% endblock %}
+
